@@ -24,14 +24,14 @@ namespace HighScoreAPI.Controllers
             [HttpGet]
             public IEnumerable<HighScore> GetHighScores()
             {
-                return _context.HighScores.OrderByDescending(h => h.Score).ToList();
+                return _context.HighScore.OrderByDescending(h => h.Score).ToList();
             }
 
             // get single HighScore with id
             [HttpGet("{id}")]
             public async Task<ActionResult<HighScore>> GetHighScore(Guid id)
             {
-                var highScore = await _context.HighScores.FindAsync(id);
+                var highScore = await _context.HighScore.FindAsync(id);
 
                 if (highScore == null)
                 {
@@ -45,12 +45,12 @@ namespace HighScoreAPI.Controllers
             [HttpPost]
             public async Task<ActionResult<HighScore>> PostHighScore(HighScore highScore)
             {
-                if (_context.HighScores.Count() >= 10)
+                if (_context.HighScore.Count() >= 10)
                 {
-                    var lastHighScore = _context.HighScores.OrderByDescending(h => h.Score).Last();
+                    var lastHighScore = _context.HighScore.OrderByDescending(h => h.Score).Last();
                     if (lastHighScore.Score < highScore.Score)
                     {
-                        _context.HighScores.Remove(lastHighScore);
+                        _context.HighScore.Remove(lastHighScore);
                     }
                     else
                     {
@@ -58,7 +58,7 @@ namespace HighScoreAPI.Controllers
                     }
                 }
 
-                _context.HighScores.Add(highScore);
+                _context.HighScore.Add(highScore);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetHighScore", new { id = highScore.HighScoreId }, highScore);
@@ -68,13 +68,13 @@ namespace HighScoreAPI.Controllers
             [HttpDelete("{id}")]
             public async Task<ActionResult<HighScore>> DeleteHighScore(Guid id)
             {
-                var highScore = await _context.HighScores.FindAsync(id);
+                var highScore = await _context.HighScore.FindAsync(id);
                 if (highScore == null)
                 {
                     return NotFound();
                 }
 
-                _context.HighScores.Remove(highScore);
+                _context.HighScore.Remove(highScore);
                 await _context.SaveChangesAsync();
 
                 return highScore;
@@ -82,7 +82,7 @@ namespace HighScoreAPI.Controllers
 
             private bool HighScoreExists(Guid id)
             {
-                return _context.HighScores.Any(e => e.HighScoreId == id);
+                return _context.HighScore.Any(e => e.HighScoreId == id);
             }
         }
     }

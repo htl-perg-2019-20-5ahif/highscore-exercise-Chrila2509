@@ -8,10 +8,11 @@ namespace HighScoreAPI.Model
 {
     public class DataContext : DbContext
     {
-        public DbSet<HighScore> HighScores { get; set; }
+        public DbSet<HighScore> HighScore { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options)
         : base(options)
         { }
+
     }
 }
